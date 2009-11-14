@@ -1,6 +1,6 @@
 = tuenti
 
-Description goes here.
+A non-official Ruby API for Tuenti
 
 == Note on Patches/Pull Requests
  

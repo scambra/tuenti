@@ -5,12 +5,15 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "tuenti"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "sergio@entrecables.com"
+    gem.summary = %Q{A non-official Ruby API for Tuenti}
+    gem.description = %Q{A non-official Ruby API for Tuenti}
+    gem.email = "sergio@enpijama.es"
     gem.homepage = "http://github.com/scambra/tuenti"
     gem.authors = ["Sergio Cambra"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_dependency "mechanize", ">= 0.9.3"
+    gem.add_dependency "json", ">= 1.2.0"
+    gem.add_dependency "activesupport", ">= 2.3.4"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
