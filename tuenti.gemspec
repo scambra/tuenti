@@ -25,7 +25,8 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/tuenti.rb",
      "test/helper.rb",
-     "test/test_tuenti.rb"
+     "test/test_tuenti.rb",
+     "tuenti.gemspec"
   ]
   s.homepage = %q{http://github.com/scambra/tuenti}
   s.rdoc_options = ["--charset=UTF-8"]
