@@ -1,6 +1,7 @@
 require 'active_support'
 require 'mechanize'
 require 'json'
+DEBUG = false unless defined? DEBUG
 
 class Tuenti
   extend ActiveSupport::Memoizable
@@ -11,30 +12,33 @@ class Tuenti
   ALBUMS_URL = 'http://www.tuenti.com/?m=Search&func=get_user_custom_albums_for_data_source&ajax=1'
   EDIT_PHOTO_URL = 'http://www.tuenti.com/?m=Photoedit&func=process_edit_photo&ajax=1'
 
-  CSRF_REGEXP = /csrf(&quot;)?[:=](&quot;)?([0-9a-zA-Z]+)\b/
-  CSRF_REGEXP_INDEX = 3
+  CSFR_REGEXP = /csfr(&quot;)?[:=](&quot;)?([0-9a-zA-Z]+)\b/
+  CSFR_REGEXP_INDEX = 3
 
   def initialize(user, password, timezone = Time.now.utc_offset/3600)
     @agent = WWW::Mechanize.new
-    @agent.post LOGIN_URL, :email => user, :input_password => password, :timezone => timezone
-    @csrf = @agent.get(HOME_URL).body.match(CSRF_REGEXP)[CSRF_REGEXP_INDEX]
+    raise Exception if @agent.post(LOGIN_URL, :email => user, :input_password => password, :timezone => timezone).uri.to_s == LOGIN_URL
+    @csfr = @agent.get(HOME_URL).body.match(CSFR_REGEXP)[CSFR_REGEXP_INDEX]
   end
 
   def upload_photo(file, attributes = nil)
     qid = @agent.submit(upload_photo_form(file)).search('#request_data').text
+    puts "QID: #{qid}" if DEBUG
     id = nil
     # el formato del id es album_id-user_id-photo_id-user_id
     while id.nil? || id =~ /-0-/ do # hasta que no se procesa photo_id es 0
       sleep(0.5)
       id = @agent.post(UPLOAD_URL, :func => 'checkq', :qid => qid).search('#request_data').text
     end
+    puts "PHOTO ID: #{id}" if DEBUG
     if attributes
-      options = {:csrf => @csrf, :collection_key => id, :photo_title => attributes[:title] || ''}
+      options = {:csfr => @csfr, :'item_ids[]' => id, :from_collection_key => id, :photo_title => attributes[:title] || ''}
       if attributes[:album]
         options[:'add_albums_collection_keys[]'] = album_id(attributes[:album])
-        @new_albums_count = 0
+        #@new_albums_count = 0
+        puts options[:'add_albums_collection_keys[]'] if DEBUG
       end
-      @agent.post EDIT_PHOTO_URL, options
+      @agent.post EDIT_PHOTO_URL + "&collection_key=#{id}", options
     end
     id
   end
