@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tuenti}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sergio Cambra"]
-  s.date = %q{2009-11-14}
+  s.date = %q{2010-06-01}
   s.description = %q{A non-official Ruby API for Tuenti}
   s.email = %q{sergio@enpijama.es}
   s.extra_rdoc_files = [
@@ -34,8 +34,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{A non-official Ruby API for Tuenti}
   s.test_files = [
-    "test/test_tuenti.rb",
-     "test/helper.rb"
+    "test/helper.rb",
+     "test/test_tuenti.rb"
   ]
 
   if s.respond_to? :specification_version then
